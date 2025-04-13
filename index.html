@@ -29,11 +29,12 @@
     <div id="error-banner" class="error-banner">ユーザーIDまたはパスワードが違います。</div>
   </div>
 
-  <!-- Firebase SDK 読み込みは body の最後！ -->
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
+  <!-- Firebase SDK（非モジュール版） -->
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
 
-  <script>
+<script>
+    // Firebase設定
     const firebaseConfig = {
       apiKey: "AIzaSyD7ouobvvAMBOg76rIdbFZiHEHzZH0q4FA",
       authDomain: "schoolapp-db.firebaseapp.com",
@@ -43,14 +44,20 @@
       appId: "1:28108935218:web:f60e76dbc3c0cca9586c2b"
     };
 
+    // Firebase初期化
     firebase.initializeApp(firebaseConfig);
+  
+    // Googleプロバイダー設定
     const provider = new firebase.auth.GoogleAuthProvider();
-
+  
+    // Googleログイン関数
     function loginWithGoogle() {
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
           const user = result.user;
           console.log("ログイン成功:", user.displayName, user.email);
+
+        // ログイン後にホームへ遷移
           window.location.href = "home.html";
         })
         .catch((error) => {
