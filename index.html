@@ -21,48 +21,43 @@
       </div>
       <button type="submit" class="login-btn">ログイン</button>
     </form>
+
     <button type="button" onclick="loginWithGoogle()" class="login-btn" style="margin-top: 10px;">
       Googleでログイン
     </button>
 
     <div id="error-banner" class="error-banner">ユーザーIDまたはパスワードが違います。</div>
   </div>
+
+  <!-- Firebase SDK 読み込みは body の最後！ -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD7ouobvvAMBOg76rIdbFZiHEHzZH0q4FA",
+      authDomain: "schoolapp-db.firebaseapp.com",
+      projectId: "schoolapp-db",
+      storageBucket: "schoolapp-db.appspot.com",
+      messagingSenderId: "28108935218",
+      appId: "1:28108935218:web:f60e76dbc3c0cca9586c2b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    function loginWithGoogle() {
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          const user = result.user;
+          console.log("ログイン成功:", user.displayName, user.email);
+          window.location.href = "home.html";
+        })
+        .catch((error) => {
+          console.error("ログインエラー:", error.message);
+          alert("Googleログインに失敗しました");
+        });
+    }
+  </script>
 </body>
 </html>
-<!-- Firebase SDK 読み込み -->
-<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
-
-<script>
-  // 🔧 Firebaseの設定（自分の設定に置き換えてください）
-  const firebaseConfig = {
-    apiKey: "AIzaSyD7ouobvvAMBOg76rIdbFZiHEHzZH0q4FA",
-    authDomain: "schoolapp-db.firebaseapp.com",
-    projectId: "schoolapp-db",
-    storageBucket: "schoolapp-db.appspot.com",
-    messagingSenderId: "28108935218",
-    appId: "1:28108935218:web:f60e76dbc3c0cca9586c2b"
-  };
-
-  // 🔄 Firebaseを初期化
-  firebase.initializeApp(firebaseConfig);
-
-  // 🔐 Googleプロバイダーの設定
-  const provider = new firebase.auth.GoogleAuthProvider();
-
-  // 🧠 Googleログイン関数
-  function loginWithGoogle() {
-    firebase.auth().signInWithPopup(provider)
-      .then((result) => {
-        const user = result.user;
-        // 👤 Googleの名前やメールアドレス取得可能
-        console.log("ログイン成功:", user.displayName, user.email);
-        // 🔁 ログイン成功後にhome.htmlへ
-        window.location.href = "home.html";
-      })
-      .catch((error) => {
-        console.error("ログインエラー:", error.message);
-        alert("Googleログインに失敗しました");
-      });
-  }
-</script>
