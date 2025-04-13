@@ -25,3 +25,40 @@
   </div>
 </body>
 </html>
+<!-- Firebase SDK 読み込み -->
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
+
+<script>
+  // 🔧 Firebaseの設定（自分の設定に置き換えてください）
+  const firebaseConfig = {
+    apiKey: "あなたのAPIキー",
+    authDomain: "あなたのプロジェクトID.firebaseapp.com",
+    projectId: "あなたのプロジェクトID",
+    storageBucket: "あなたのプロジェクトID.appspot.com",
+    messagingSenderId: "送信者ID",
+    appId: "アプリID"
+  };
+
+  // 🔄 Firebaseを初期化
+  firebase.initializeApp(firebaseConfig);
+
+  // 🔐 Googleプロバイダーの設定
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  // 🧠 Googleログイン関数
+  function loginWithGoogle() {
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        const user = result.user;
+        // 👤 Googleの名前やメールアドレス取得可能
+        console.log("ログイン成功:", user.displayName, user.email);
+        // 🔁 ログイン成功後にhome.htmlへ
+        window.location.href = "home.html";
+      })
+      .catch((error) => {
+        console.error("ログインエラー:", error.message);
+        alert("Googleログインに失敗しました");
+      });
+  }
+</script>
