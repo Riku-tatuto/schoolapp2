@@ -1,3 +1,13 @@
+// auth.js（すべての保護ページで読み込む）
+document.addEventListener('DOMContentLoaded', () => {
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+  if (!isLoggedIn || isLoggedIn !== 'true') {
+    // ログインしていない場合はログインページへリダイレクト
+    window.location.href = "index.html";
+  }
+});
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   const errorBanner = document.getElementById("error-banner");
