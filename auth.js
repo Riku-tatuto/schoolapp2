@@ -1,13 +1,3 @@
-// auth.js（すべての保護ページで読み込む）
-document.addEventListener('DOMContentLoaded', () => {
-  const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-  if (!isLoggedIn || isLoggedIn !== 'true') {
-    // ログインしていない場合はログインページへリダイレクト
-    window.location.href = "index.html";
-  }
-});
-
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   const errorBanner = document.getElementById("error-banner");
@@ -56,3 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
 sessionStorage.setItem('isLoggedIn', 'true');
 sessionStorage.setItem('username', username); // ユーザー名を保持
 window.location.href = "home.html";
+
+// auth.js（すべての保護ページで読み込む）
+document.addEventListener('DOMContentLoaded', () => {
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+  if (!isLoggedIn || isLoggedIn !== 'true') {
+    // ログインしていない場合はログインページへリダイレクト
+    window.location.href = "index.html";
+  }
+});
