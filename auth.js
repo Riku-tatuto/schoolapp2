@@ -51,3 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+// 認証成功時
+sessionStorage.setItem('isLoggedIn', 'true');
+sessionStorage.setItem('username', username); // ユーザー名を保持
+window.location.href = "home.html";
