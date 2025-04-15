@@ -1,57 +1,68 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("loginForm");
-  const errorBanner = document.getElementById("error-banner");
+  const loginForm = document.getElementById("loginForm");
 
-  form.addEventListener("submit", async function (event) {
-    event.preventDefault();
+  if (loginForm) {
+    // ✅ ログイン処理
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
 
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-    try {
-      const res = await fetch("users.csv");
-      const text = await res.text();
+      fetch("users.csv")
+        .then((response) => {
+          if (!response.ok) throw new Error("ユーザーデータの読み込みに失敗しました");
+          return response.text();
+        })
+        .then((csvText) => {
+          const lines = csvText.split("\n");
+          const headers = lines[0].split(",");
+          const users = lines.slice(1).map((line) => {
+            const values = line.split(",");
+            const userObj = {};
+            headers.forEach((header, index) => {
+              userObj[header.trim()] = values[index]?.trim();
+            });
+            return userObj;
+          });
 
-      const lines = text.split("\n").slice(1); // ヘッダー除く
-      let isAuthenticated = false;
+          const matchedUser = users.find((user) => user.username === username && user.password === password);
 
-      for (const line of lines) {
-        const [csvUser, csvPass, name, course, grade, classNum, number] = line.trim().split(",");
+          if (matchedUser) {
+            // ✅ ログイン成功 → セッション保存
+            sessionStorage.setItem("isLoggedIn", "true");
+            sessionStorage.setItem("username", matchedUser.username);
+            sessionStorage.setItem("name", matchedUser.name);
+            sessionStorage.setItem("course", matchedUser.course);
+            sessionStorage.setItem("grade", matchedUser.grade);
+            sessionStorage.setItem("class", matchedUser.class);
+            sessionStorage.setItem("number", matchedUser.number);
 
-        if (username === csvUser && password === csvPass) {
-          // セッション保存
-          sessionStorage.setItem("name", name);
-          sessionStorage.setItem("course", course.toUpperCase() + "コース");
-          sessionStorage.setItem("grade", grade);
-          sessionStorage.setItem("class", classNum);
-          sessionStorage.setItem("number", number);
-          isAuthenticated = true;
-          break;
-        }
-      }
+            window.location.href = "home.html";
+          } else {
+            document.getElementById("error-banner").style.display = "block";
+          }
+        })
+        .catch((error) => {
+          console.error("ログインエラー:", error);
+          alert("エラーが発生しました。");
+        });
+    });
+  }
 
-      if (isAuthenticated) {
-        location.href = "home.html";
-      } else {
-        errorBanner.style.display = "block";
-      }
+  // ✅ 不正アクセス防止（ログイン後ページでのみ有効）
+  const currentPage = window.location.pathname;
 
-    } catch (err) {
-      console.error("CSV読み込みエラー", err);
+  if (!currentPage.endsWith("index.html") && !currentPage.endsWith("/")) {
+    const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+    if (!isLoggedIn || isLoggedIn !== "true") {
+      window.location.href = "index.html"; // 未ログイン → ログインページへ
     }
-  });
-});
-
-// 認証成功時
-sessionStorage.setItem('isLoggedIn', 'true');
-sessionStorage.setItem('username', username); // ユーザー名を保持
-window.location.href = "home.html";
-
-// auth.js（すべての保護ページで読み込む）
-document.addEventListener('DOMContentLoaded', () => {
-  const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-  if (!isLoggedIn || isLoggedIn !== 'true') {
-    // ログインしていない場合はログインページへリダイレクト
-    window.location.href = "index.html";
   }
 });
+
+// ✅ ログアウト処理（ログアウトボタンで呼び出し）
+function logout() {
+  sessionStorage.clear();
+  window.location.href = "index.html";
+}
