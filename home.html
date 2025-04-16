@@ -1,30 +1,26 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
   <title>ホーム</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    // 🔐 ログインしてないと戻す
+    if (!localStorage.getItem("loggedInUser")) {
+      window.location.href = "index.html";
+    }
+  </script>
 </head>
 <body>
-  <div class="sidebar">
-    <div class="menu">
-      <div class="menu-item active" data-page="home">ホーム</div>
-      <div class="menu-item" data-page="schedule">予定</div>
-    </div>
-    <div class="logout-wrapper">
-      <button id="logout">ログアウト</button>
-    </div>
-  </div>
+  <!-- 左側ナビなどは省略 -->
   <div class="content">
-    <div id="home" class="page">
-      <h1 id="welcome"></h1>
-    </div>
-    <div id="schedule" class="page" style="display:none;">
-      <h2>今週の予定</h2>
-      <div id="timetable"></div>
-    </div>
+    <h2>ホーム画面</h2>
+    <p>ようこそ、<span id="username"></span>さん！</p>
   </div>
+
+  <script>
+    // 👤 ユーザー名表示
+    document.getElementById("username").textContent = localStorage.getItem("loggedInUser");
+  </script>
 </body>
 </html>
