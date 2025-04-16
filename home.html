@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ホーム</title>
-  <link rel="stylesheet" href="style.css" />
-  <script>
-    // 🔐 ログインしてないと戻す
-    if (!localStorage.getItem("loggedInUser")) {
-      window.location.href = "index.html";
-    }
-  </script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 左側ナビなどは省略 -->
-  <div class="content">
-    <h2>ホーム画面</h2>
-    <p>ようこそ、<span id="username"></span>さん！</p>
+  <div class="wrapper">
+    <nav class="sidebar">
+      <div class="nav-buttons">
+        <button onclick="showSection('home')" id="btn-home">ホーム</button>
+        <button onclick="showSection('schedule')" id="btn-schedule">予定</button>
+        <button onclick="showSection('account')" id="btn-account">アカウント</button>
+      </div>
+      <button id="logout" class="logout-btn">ログアウト</button>
+    </nav>
+
+    <main class="main-content">
+      <section id="home-section" class="section active">
+        <h1 id="welcome-message">ようこそ！</h1>
+      </section>
+
+      <section id="schedule-section" class="section">
+        <h2>時間割</h2>
+        <div id="schedule-table"></div>
+      </section>
+
+      <section id="account-section" class="section">
+        <h2>アカウント</h2>
+        <button onclick="linkGoogle()">Googleアカウントと連携</button>
+        <button onclick="unlinkGoogle()">Google連携を解除</button>
+        <p id="account-message"></p>
+      </section>
+    </main>
   </div>
 
-  <script>
-    // 👤 ユーザー名表示
-    document.getElementById("username").textContent = localStorage.getItem("loggedInUser");
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
